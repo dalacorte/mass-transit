@@ -1,13 +1,10 @@
+using MassTransit;
+using Microsoft.Extensions.Hosting;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using MassTransit;
 
-namespace DockerTransit
+namespace DMT
 {
     public class Program
     {
@@ -15,7 +12,7 @@ namespace DockerTransit
 
         static bool IsRunningInContainer =>
             _isRunningInContainer ??= bool.TryParse(Environment.GetEnvironmentVariable("DOTNET_RUNNING_IN_CONTAINER"), out var inContainer) && inContainer;
-   
+
         public static async Task Main(string[] args)
         {
             await CreateHostBuilder(args).Build().RunAsync();
@@ -48,7 +45,7 @@ namespace DockerTransit
                                 cfg.Host("rabbitmq");
 
                             cfg.UseDelayedMessageScheduler();
-                            
+
                             cfg.ConfigureEndpoints(context);
                         });
                     });
